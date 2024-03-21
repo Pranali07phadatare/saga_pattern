@@ -1,0 +1,38 @@
+#spring.application.name=paymentService
+
+
+spring:
+  application:
+    name: paymentService
+  datasource:
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/paymentDb
+    password: 1234
+    hikari:
+      maximumPoolSize: 5
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  spring:
+    cloud:
+      stream:
+        function:
+          definition: paymentProcessor
+        bindings:
+          paymentProcessor-in-0:
+            destination: order-event
+          paymentProcessor-out-0:
+            destination: payment-event
+
+
+  #order-event-topic name
+  server:
+    port: 8081
